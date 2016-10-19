@@ -2,13 +2,13 @@
 
 */
 
-#include "Edge.hpp";
+#include "Edge.hpp"
 #include<string>
 
 
 Edge::Edge(std::string nodeA, std::string nodeB, double cost)
 {
-	if (nodeA > nodeB)
+	if (nodeA < nodeB)
 	{
 		m_nodeA = nodeA;
 		m_nodeB = nodeB;
@@ -27,6 +27,9 @@ bool Edge::operator<(const Edge &other) const
 {
 	return m_nodeA < other.m_nodeA;;
 }
+
+
+
 
 std::string Edge::getNodeA()
 {

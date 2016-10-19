@@ -9,10 +9,13 @@
 class Node
 {
 public:
+	Node::Node(std::string id, double cost);
 	Node(std::string id, double cost,std::string pathHistory);
 	std::string getNode();
 	double getCost();
-	std::string pathHistory();
+	std::string getPathHistory();
+	bool Node::operator<(const Node &other) const;
+
 
 private:
 	std::string m_id;

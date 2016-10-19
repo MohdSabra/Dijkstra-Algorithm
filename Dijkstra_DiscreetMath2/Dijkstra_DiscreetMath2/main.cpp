@@ -23,45 +23,106 @@ int main()
 
 	parseDataFromFile(edges); // extract all the edges from the text file
 	sort(edges.begin(), edges.end()); // sort the edges based on the first node ( nodeA) string name
+	overwriteFile(edges);
 	getInput(nodeA, nodeB);
 
+	Node curNode(nodeA, 0);
 
-	double prevCost = 0;
-	int   existedNodeLocation = -1; 
+	int  edgeIndexReached = 0;
+	int  numOfEdgesFound = 0;
 
-	for (int curEdge = 0; curEdge < edges.size(); curEdge++)
-	{
-		if (edges[curEdge].getNodeA() == nodeA)
+	do {
+		for ( int curEdge = 0; curEdge < edges.size(); curEdge++)
 		{
-			for (int curNode = 0; curNode < nodes.size(); curNode++)
+			if (edges[curEdge].getNodeA() == curNode.getNode())
 			{
-				if (nodes[curNode].getNode() == edges[curEdge].getNodeB())
-				{
-					existedNodeLocation = curNode;
-					break;
-				}
-			}
-			int newNodeCost = prevCost + edges[curEdge].getCost(); // prevCost????
-			Node newNode(edges[curEdge].getNodeB(), newNodeCost, "hist" );
-			if (existedNodeLocation > -1)
-			{
-				if (nodes[existedNodeLocation].getCost() > newNodeCost)
-				{
-					nodes[existedNodeLocation] = newNode;
-				}
 
+				matchEdge(curEdge, edges, nodes, curNode);
+				edges.erase(edges.begin() + curEdge);
+				curEdge--;
+				
+
+			}
+			else if (edges[curEdge].getNodeA() > curNode.getNode())
+			{
+				break;
 			}
 			else
 			{
-				nodes.push_back(newNode);
+				edgeIndexReached++; // we are still counting last 
 			}
 
-			
+
 		}
-		else if () /// do the back glip
-	}
+
+
+		for (int curEdge = edgeIndexReached; curEdge > 0; curEdge--)
+		{
+			if (edges[curEdge].getNodeB() == curNode.getNode())
+			{
+				matchEdge(curEdge, edges, nodes, curNode);
+				edges.erase(edges.begin() + curEdge);
+				
+			}
+		}
+		sort(nodes.begin(), nodes.end()); // sort after all the addition is done
+
+
+		if (nodes.size() == 0)
+		{
+			cout << "Error";
+		}
+		else
+		{
+			curNode = nodes[0];
+			nodes.erase(nodes.begin());
+
+
+		}
+	} while (curNode.getNode() != nodeB);
+
+	cout << endl << curNode.getCost() << endl << curNode.getPathHistory();
+	
+	int ends;
+	cin >> ends;
 
 	return 1;
+}
+
+
+void printCurrNodes()
+{
+
+}
+
+void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode )
+{
+	int   existedNodeLocation = -1;
+
+	for (unsigned int node = 0; node < nodes.size(); node++)  // binary search???
+	{
+		if (nodes[node].getNode() == edges[curEdge].getNodeB())
+		{
+			existedNodeLocation = node;
+			break;
+		}
+	}
+	double newNodeCost = curNode.getCost() + edges[curEdge].getCost();
+	Node newNode(edges[curEdge].getNodeB(), newNodeCost, curNode.getPathHistory());
+	if (existedNodeLocation > -1)
+	{
+		if (nodes[existedNodeLocation].getCost() > newNodeCost)
+		{
+			nodes[existedNodeLocation] = newNode;
+		}
+
+	}
+	else
+	{
+		nodes.push_back(newNode);
+
+	}
+
 }
 
 void getInput(string &nodeA, string &nodeB)
@@ -73,8 +134,23 @@ void getInput(string &nodeA, string &nodeB)
 	cout << endl;
 }
 
+void overwriteFile(vector<Edge> &edges)
+{
+	ofstream file("test.txt");
+
+	for (unsigned int curEdge = 0; curEdge < edges.size(); curEdge++)
+	{
+		file << edges[curEdge].getNodeA() << " " << edges[curEdge].getNodeB() << " " << edges[curEdge].getCost() << endl;
+	}
+	
+
+
+}
+
 void parseDataFromFile(vector<Edge> &edges)
 {
+
+
 	string fileName = "test.txt";
 	ifstream file;
 

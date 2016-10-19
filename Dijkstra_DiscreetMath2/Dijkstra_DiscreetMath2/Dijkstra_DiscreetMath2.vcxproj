@@ -119,6 +119,9 @@
     <ClInclude Include="Main.hpp" />
     <ClInclude Include="Node.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Debug\test.log" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
