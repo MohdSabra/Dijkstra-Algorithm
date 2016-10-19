@@ -28,16 +28,17 @@ int main()
 
 	Node curNode(nodeA, 0);
 
-	int  edgeIndexReached = 0;
+
 	int  numOfEdgesFound = 0;
 
 	do {
+		int  edgeIndexReached = 0;
 		for ( int curEdge = 0; curEdge < edges.size(); curEdge++)
 		{
 			if (edges[curEdge].getNodeA() == curNode.getNode())
 			{
 
-				matchEdge(curEdge, edges, nodes, curNode);
+				matchEdge(curEdge, edges, nodes, curNode, edges[curEdge].getNodeB());
 				edges.erase(edges.begin() + curEdge);
 				curEdge--;
 				
@@ -56,11 +57,11 @@ int main()
 		}
 
 
-		for (int curEdge = edgeIndexReached; curEdge > 0; curEdge--)
+		for (int curEdge = edgeIndexReached - 1; curEdge >= 0; curEdge--)
 		{
-			if (edges[curEdge].getNodeB() == curNode.getNode())
+			if (edges[curEdge ].getNodeB() == curNode.getNode())
 			{
-				matchEdge(curEdge, edges, nodes, curNode);
+				matchEdge(curEdge, edges, nodes, curNode, edges[curEdge].getNodeA()); // get frist node id
 				edges.erase(edges.begin() + curEdge);
 				
 			}
@@ -95,20 +96,20 @@ void printCurrNodes()
 
 }
 
-void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode )
+void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode, string nodeId )
 {
 	int   existedNodeLocation = -1;
 
 	for (unsigned int node = 0; node < nodes.size(); node++)  // binary search???
 	{
-		if (nodes[node].getNode() == edges[curEdge].getNodeB())
+		if (nodes[node].getNode() == nodeId) // compare to node ID
 		{
 			existedNodeLocation = node;
 			break;
 		}
 	}
 	double newNodeCost = curNode.getCost() + edges[curEdge].getCost();
-	Node newNode(edges[curEdge].getNodeB(), newNodeCost, curNode.getPathHistory());
+	Node newNode( nodeId, newNodeCost, curNode.getPathHistory());
 	if (existedNodeLocation > -1)
 	{
 		if (nodes[existedNodeLocation].getCost() > newNodeCost)
