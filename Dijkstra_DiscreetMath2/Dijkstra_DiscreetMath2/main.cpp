@@ -15,7 +15,9 @@ dijkstra
 
 using namespace std;
 
-int main()
+string FILE_NAME = "test.txt";
+
+int main() // O( E * N )
 {
 	vector<Edge> edges;
 	vector<Node> nodes;
@@ -31,41 +33,21 @@ int main()
 	// Repeat until the curNode = nodeB
 	do {
 		int  edgeIndexReached = 0; 
-		for ( int curEdge = 0; curEdge < edges.size(); curEdge++)
+		for ( int curEdge = 0; curEdge < edges.size(); curEdge++) // O(E)  
 		{
 			if (edges[curEdge].getNodeA() == curNode.getNode())
 			{
-
-				matchEdge(curEdge, edges, nodes, curNode, edges[curEdge].getNodeB());
+				matchEdge(edges[curEdge].getCost(), nodes, curNode, edges[curEdge].getNodeB()); // O(N)
 				edges.erase(edges.begin() + curEdge);
 				curEdge--;
-				
-
 			}
-			else if (edges[curEdge].getNodeA() > curNode.getNode())
+			else if (edges[curEdge].getNodeB() == curNode.getNode()) 
 			{
-				break;
-			}
-			else
-			{
-				edgeIndexReached++; // we are still counting last 
-			}
-
-
-		}
-
-
-		for (int curEdge = edgeIndexReached - 1; curEdge >= 0; curEdge--)
-		{
-			if (edges[curEdge ].getNodeB() == curNode.getNode())
-			{
-				matchEdge(curEdge, edges, nodes, curNode, edges[curEdge].getNodeA()); // get frist node id
+				matchEdge(edges[curEdge].getCost(), nodes, curNode, edges[curEdge].getNodeA()); //O(N)
 				edges.erase(edges.begin() + curEdge);
-				
+				curEdge--;
 			}
 		}
-		sort(nodes.begin(), nodes.end()); // sort after all the addition is done
-
 
 		if (nodes.size() == 0)
 		{
@@ -73,9 +55,9 @@ int main()
 		}
 		else
 		{
-			curNode = nodes[0];
-			nodes.erase(nodes.begin());
-
+			int curNodeIndex = leastCostNode(nodes);  // O(N)
+			curNode = nodes[curNodeIndex];
+			nodes.erase(nodes.begin() + curNodeIndex);
 
 		}
 	} while (curNode.getNode() != nodeB);
@@ -88,40 +70,48 @@ int main()
 	return 1;
 }
 
+//find the index of the least costly node jump
+// O(N)
+int leastCostNode(vector<Node> &nodes)
+{	
+	int least = 0;
+	for (int curNode = 0; curNode < nodes.size() ; curNode++)
+	{
+		if (nodes[least].getCost() > nodes[curNode].getCost())
+		{
+			least = curNode;
+		}
+	}
 
-void printCurrNodes()
-{
-
+	return least;
 }
 
-//get starting and desination nodes
-// O(K)
-void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode, string nodeId ) // toDo lower number of parameters
-{
-	int   existedNodeLocation = -1;
 
-	for (unsigned int node = 0; node < nodes.size(); node++)  // binary search???
+//get starting and desination nodes
+// O(N)
+void matchEdge(double curEdgeCost, vector<Node> &nodes, Node curNode, string nodeId ) // toDo lower number of parameters
+{
+	int existedNodeLocation = -1; // check if the node already exists
+	for (unsigned int node = 0; node < nodes.size(); node++)  // loop through all the nodes to check if it exists --- O(N)
 	{
-		if (nodes[node].getNode() == nodeId) // compare to node ID
+		if (nodes[node].getNode() == nodeId) 
 		{
-			existedNodeLocation = node;
+			existedNodeLocation = node;  // if found then extract the index and break out of loop
 			break;
 		}
 	}
-	double newNodeCost = curNode.getCost() + edges[curEdge].getCost();
-	Node newNode( nodeId, newNodeCost, curNode.getPathHistory());
+	double newNodeCost = curNode.getCost() + curEdgeCost;
+	Node newNode( nodeId, newNodeCost, curNode.getPathHistory());  // create a newnode using the dataabove
 	if (existedNodeLocation > -1)
 	{
 		if (nodes[existedNodeLocation].getCost() > newNodeCost)
 		{
 			nodes[existedNodeLocation] = newNode;
 		}
-
 	}
 	else
 	{
 		nodes.push_back(newNode);
-
 	}
 
 }
@@ -138,33 +128,26 @@ void getInput(string &nodeA, string &nodeB)
 }
 
 // read the entire edge vector and overright the file
-// O(N)
+// O(E)
 void overwriteFile(vector<Edge> &edges)
 {
-	ofstream file("test.txt"); //TODO make file name static
-
+	ofstream file(FILE_NAME);
 	for (unsigned int curEdge = 0; curEdge < edges.size(); curEdge++)
 	{
 		file << edges[curEdge].getNodeA() << " " << edges[curEdge].getNodeB() << " " << edges[curEdge].getCost() << endl;
 	}
-	
-
-
 }
 
 // Extract all vectors from file and place them to the reference vector
-// O(N)
+// O(E)
 void parseDataFromFile(vector<Edge> &edges)
 {
-
-
-	string fileName = "test.txt";
 	ifstream file;
 
 	string nodeA, nodeB;
 	double cost;
 
-	file.open(fileName.c_str());
+	file.open(FILE_NAME.c_str());
 
 	if (file.is_open())
 	{

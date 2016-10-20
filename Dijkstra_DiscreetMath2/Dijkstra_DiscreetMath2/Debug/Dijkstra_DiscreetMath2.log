@@ -1,2 +1,5 @@
-﻿  Dijkstra_DiscreetMath2.vcxproj -> C:\Users\f764y728\Desktop\New folder (2)\Dijkstra-Algorithm\Dijkstra_DiscreetMath2\Debug\Dijkstra_DiscreetMath2.exe
+﻿  main.cpp
+c:\users\f764y728\desktop\new folder (2)\dijkstra-algorithm\dijkstra_discreetmath2\dijkstra_discreetmath2\main.cpp(36): warning C4018: '<': signed/unsigned mismatch
+c:\users\f764y728\desktop\new folder (2)\dijkstra-algorithm\dijkstra_discreetmath2\dijkstra_discreetmath2\main.cpp(78): warning C4018: '<': signed/unsigned mismatch
+  Dijkstra_DiscreetMath2.vcxproj -> C:\Users\f764y728\Desktop\New folder (2)\Dijkstra-Algorithm\Dijkstra_DiscreetMath2\Debug\Dijkstra_DiscreetMath2.exe
   Dijkstra_DiscreetMath2.vcxproj -> C:\Users\f764y728\Desktop\New folder (2)\Dijkstra-Algorithm\Dijkstra_DiscreetMath2\Debug\Dijkstra_DiscreetMath2.pdb (Partial PDB)
