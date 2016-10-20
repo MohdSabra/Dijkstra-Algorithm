@@ -3,6 +3,8 @@ a c 16
 a d 3
 b c 10
 b d 23
+b sds 1
 c d 4
 d x 1
 e x 442
+e sds 1

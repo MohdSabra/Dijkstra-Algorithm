@@ -21,18 +21,16 @@ int main()
 	vector<Node> nodes;
 	string nodeA, nodeB;
 
-	parseDataFromFile(edges); // extract all the edges from the text file
-	sort(edges.begin(), edges.end()); // sort the edges based on the first node ( nodeA) string name
-	overwriteFile(edges);
-	getInput(nodeA, nodeB);
+	parseDataFromFile(edges);
+	sort(edges.begin(), edges.end()); // sort the edge vector
+	overwriteFile(edges); 
+	getInput(nodeA, nodeB); 
 
-	Node curNode(nodeA, 0);
+	Node curNode(nodeA, 0); // frist node
 
-
-	int  numOfEdgesFound = 0;
-
+	// Repeat until the curNode = nodeB
 	do {
-		int  edgeIndexReached = 0;
+		int  edgeIndexReached = 0; 
 		for ( int curEdge = 0; curEdge < edges.size(); curEdge++)
 		{
 			if (edges[curEdge].getNodeA() == curNode.getNode())
@@ -96,7 +94,9 @@ void printCurrNodes()
 
 }
 
-void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode, string nodeId )
+//get starting and desination nodes
+// O(K)
+void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNode, string nodeId ) // toDo lower number of parameters
 {
 	int   existedNodeLocation = -1;
 
@@ -126,6 +126,8 @@ void matchEdge(int curEdge, vector<Edge> &edges, vector<Node> &nodes, Node curNo
 
 }
 
+//get starting and desination nodes
+// O(1)
 void getInput(string &nodeA, string &nodeB)
 {
 	cout << "Choose the starting node: ";
@@ -135,9 +137,11 @@ void getInput(string &nodeA, string &nodeB)
 	cout << endl;
 }
 
+// read the entire edge vector and overright the file
+// O(N)
 void overwriteFile(vector<Edge> &edges)
 {
-	ofstream file("test.txt");
+	ofstream file("test.txt"); //TODO make file name static
 
 	for (unsigned int curEdge = 0; curEdge < edges.size(); curEdge++)
 	{
@@ -148,6 +152,8 @@ void overwriteFile(vector<Edge> &edges)
 
 }
 
+// Extract all vectors from file and place them to the reference vector
+// O(N)
 void parseDataFromFile(vector<Edge> &edges)
 {
 
